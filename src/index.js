@@ -11,12 +11,25 @@ import { Auth0Provider } from '@auth0/auth0-react'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
+// dev-rcozhnwc5v5d8qdu.us.auth0.com
+// oNVJ8bIA4Ta2X5cpmMunafS95ESlQzIW
 root.render(
-  <ProductsProvider>
-    <FilterProvider>
-      <CartProvider>
-        <App />
-      </CartProvider>
-    </FilterProvider>
-  </ProductsProvider>
+  <Auth0Provider
+    domain='dev-rcozhnwc5v5d8qdu.us.auth0.com'
+    clientId='oNVJ8bIA4Ta2X5cpmMunafS95ESlQzIW'
+    cacheLocation='localstorage'
+    authorizationParams={{
+      redirect_uri: window.location.origin,
+    }}
+  >
+    <UserProvider>
+      <ProductsProvider>
+        <FilterProvider>
+          <CartProvider>
+            <App />
+          </CartProvider>
+        </FilterProvider>
+      </ProductsProvider>
+    </UserProvider>
+  </Auth0Provider>
 )
