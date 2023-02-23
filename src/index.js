@@ -12,13 +12,13 @@ import { Auth0Provider } from '@auth0/auth0-react'
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 // dev-rcozhnwc5v5d8qdu.us.auth0.com
-// oNVJ8bIA4Ta2X5cpmMunafS95ESlQzIW
+// 23pvumkTdKYKM8DJJuoJmQKk54NwrGJS
 root.render(
   <Auth0Provider
     domain='dev-rcozhnwc5v5d8qdu.us.auth0.com'
-    clientId='oNVJ8bIA4Ta2X5cpmMunafS95ESlQzIW'
+    clientId='23pvumkTdKYKM8DJJuoJmQKk54NwrGJS'
     authorizationParams={{
-      redirect_uri: window.location.origin,
+      redirect_uri: 'https://buy-furniture-online.netlify.app',
     }}
   >
     <UserProvider>

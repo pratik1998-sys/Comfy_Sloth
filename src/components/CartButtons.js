@@ -28,7 +28,11 @@ const CartButtons = () => {
           type='button'
           className='auth-btn'
           onClick={() => {
-            logout({ logoutParams: { returnTo: window.location.origin } })
+            logout({
+              logoutParams: {
+                returnTo: 'https://buy-furniture-online.netlify.app',
+              },
+            })
           }}
         >
           <FaUserMinus />
