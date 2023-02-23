@@ -18,7 +18,7 @@ root.render(
     domain='dev-rcozhnwc5v5d8qdu.us.auth0.com'
     clientId='23pvumkTdKYKM8DJJuoJmQKk54NwrGJS'
     authorizationParams={{
-      redirect_uri: 'https://buy-furniture-online.netlify.app',
+      redirect_uri: window.location.origin,
     }}
   >
     <UserProvider>

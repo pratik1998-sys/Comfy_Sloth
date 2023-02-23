@@ -12,6 +12,7 @@ export const UserProvider = ({ children }) => {
     console.log(`user : ${myUser}`)
     console.log(`isAuthenticated : ${isAuthenticated}`)
     console.log(`isLoading : ${isLoading}`)
+    console.log(window.location.origin)
   }, [isAuthenticated])
 
   return (
