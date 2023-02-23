@@ -13,13 +13,12 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 
 // dev-rcozhnwc5v5d8qdu.us.auth0.com
 // 23pvumkTdKYKM8DJJuoJmQKk54NwrGJS
+
 root.render(
   <Auth0Provider
     domain='dev-rcozhnwc5v5d8qdu.us.auth0.com'
     clientId='23pvumkTdKYKM8DJJuoJmQKk54NwrGJS'
-    authorizationParams={{
-      redirect_uri: window.location.origin,
-    }}
+    redirectUri={window.location.origin}
   >
     <UserProvider>
       <ProductsProvider>

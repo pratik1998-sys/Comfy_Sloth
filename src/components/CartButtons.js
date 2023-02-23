@@ -17,11 +17,7 @@ const CartButtons = () => {
           <FaShoppingCart />
           <span className='cart-value'>{total_items}</span>
         </span>
-        <button
-          type='button'
-          className='auth-btn'
-          onClick={() => loginWithRedirect()}
-        >
+        <button type='button' className='auth-btn' onClick={loginWithRedirect}>
           <FaUserPlus />
         </button>
         <button
