@@ -19,6 +19,7 @@ root.render(
     domain='dev-rcozhnwc5v5d8qdu.us.auth0.com'
     clientId='23pvumkTdKYKM8DJJuoJmQKk54NwrGJS'
     redirectUri={window.location.origin}
+    cacheLocation='localstorage'
   >
     <UserProvider>
       <ProductsProvider>

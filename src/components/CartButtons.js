@@ -17,18 +17,25 @@ const CartButtons = () => {
           <FaShoppingCart />
           <span className='cart-value'>{total_items}</span>
         </span>
-        <button type='button' className='auth-btn' onClick={loginWithRedirect}>
-          <FaUserPlus />
-        </button>
-        <button
-          type='button'
-          className='auth-btn'
-          onClick={() => {
-            logout({ logoutParams: { returnTo: window.location.origin } })
-          }}
-        >
-          <FaUserMinus />
-        </button>
+        {myUser ? (
+          <button
+            type='button'
+            className='auth-btn'
+            onClick={() => {
+              logout({ logoutParams: { returnTo: window.location.origin } })
+            }}
+          >
+            <FaUserMinus />
+          </button>
+        ) : (
+          <button
+            type='button'
+            className='auth-btn'
+            onClick={loginWithRedirect}
+          >
+            <FaUserPlus />
+          </button>
+        )}
       </Link>
     </Wrapper>
   )
