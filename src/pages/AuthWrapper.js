@@ -10,11 +10,7 @@ const AuthWrapper = ({ children }) => {
   if (error) {
     return <>{error.message}</>
   }
-  return (
-    <Wrapper>
-      <>{children}</>
-    </Wrapper>
-  )
+  return <>{children}</>
 }
 
 const Wrapper = styled.section`
