@@ -48,18 +48,12 @@ const CheckoutForm = () => {
   const [clientSecret, setClientSecret] = useState('')
 
   const createPaymentIntent = async () => {
-    console.log(
-      await axios.post(
+    try {
+      const data = await axios.post(
         '/.netlify/functions/create-payment-intent',
         JSON.stringify({ cart, shipping_fee, total_amount })
       )
-    )
-    // try {
-    //   const data = await axios.post(
-    //     '/.netlify/functions/create-payment-intent',
-    //     JSON.stringify({ cart, shipping_fee, total_amount })
-    //   )
-    // } catch (error) {}
+    } catch (error) {}
   }
 
   useEffect(() => {
