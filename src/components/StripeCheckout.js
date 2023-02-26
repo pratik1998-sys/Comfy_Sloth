@@ -47,8 +47,13 @@ const CheckoutForm = () => {
   const [disabled, setDisabled] = useState(true)
   const [clientSecret, setClientSecret] = useState('')
 
-  const createPaymentIntent = () => {
-    console.log('hello from stripe checkout')
+  const createPaymentIntent = async () => {
+    try {
+      const data = await axios.post(
+        '/.netlify/functions/create-payment-intent',
+        JSON.stringify({ cart, shipping_fee, total_amount })
+      )
+    } catch (error) {}
   }
 
   useEffect(() => {
