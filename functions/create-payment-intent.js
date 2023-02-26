@@ -3,7 +3,9 @@ const { calculateNewValue } = require('@testing-library/user-event/dist/utils')
 //domain/.netlify/functions/create-payment-intent
 require('dotenv').config()
 
-const stripe = require('stripe')(process.env.REACT_APP_STRIPE_PRIVATE_ID)
+const stripe = require('stripe')(
+  'sk_test_51MfJ0BSJYE23cJsyDkLfL52n5agJpnxPsV0mDjiyOfUolxawktQikyicaiEGUBSjW33IpuYFLT0a8T4oCjfIQdT300OxHpRBFM'
+)
 
 exports.handler = async function (event, context) {
   if (event.body) {
