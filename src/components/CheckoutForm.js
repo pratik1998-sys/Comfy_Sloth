@@ -93,11 +93,7 @@ const CheckoutForm = () => {
   return (
     <Wrapper>
       <form id='payment-form' onSubmit={handleSubmit}>
-        <CardElement
-          id='card-element'
-          options={cardStyle}
-          onChange={handleChange}
-        />
+        <CardElement id='card-element' onChange={handleChange} />
         <button disabled={processing || disabled || succeeded} id='submit'>
           <span id='button-text'>
             {processing ? (

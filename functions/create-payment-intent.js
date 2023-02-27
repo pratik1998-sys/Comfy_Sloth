@@ -9,7 +9,6 @@ app.use(express.static('public'))
 app.use(express.json())
 
 const calculateOrderAmount = (shipping_fee, total_amount) => {
-  console.log()
   return shipping_fee + total_amount
 }
 
