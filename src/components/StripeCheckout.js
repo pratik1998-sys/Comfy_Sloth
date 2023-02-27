@@ -49,52 +49,91 @@ const CheckoutForm = () => {
 
   const createPaymentIntent = async () => {
     try {
-      const data = await axios.post(
-        window.location.origin + '/.netlify/functions/create-payment-intent',
+      const { data } = await axios.post(
+        '/.netlify/functions/create-payment-intent',
         JSON.stringify({ cart, shipping_fee, total_amount })
       )
-      console.log(
-        window.location.origin + '/.netlify/functions/create-payment-intent'
-      )
+      console.log(data.clientSecret)
+      setClientSecret(data.clientSecret)
     } catch (error) {
       console.log(error.response)
     }
   }
-
   useEffect(() => {
     createPaymentIntent()
     //eslint-disable-next-line
   }, [])
 
-  const handleChange = async (event) => {}
-  const handleSubmit = async (ev) => {}
+  const handleSubmit = async (ev) => {
+    ev.preventDefault()
+    setProcessing(true)
+
+    const payload = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: elements.getElement(CardElement),
+      },
+    })
+
+    if (payload.error) {
+      setError(`Payment failed ${payload.error.message}`)
+      setProcessing(false)
+    } else {
+      setError(null)
+      setProcessing(false)
+      setSucceeded(true)
+    }
+  }
+  const handleChange = async (event) => {
+    setDisabled(event.empty)
+    setError(event.error ? event.error.message : '')
+  }
 
   return (
     <div>
+      {succeeded ? (
+        <article>
+          <h4>Thank you</h4>
+          <h4>your payment was successfull</h4>
+          <h4></h4>
+        </article>
+      ) : (
+        <article>
+          <h4>Hello! {myUser && myUser.name}</h4>
+          <h4>
+            your total price is : {formatPrice(shipping_fee + total_amount)}
+          </h4>
+          <h4>Test Card number : 4242 4242 4242 4242</h4>
+        </article>
+      )}
       <form id='payment-form' onSubmit={handleSubmit}>
         <CardElement
           id='card-element'
-          onChange={handleChange}
           options={cardStyle}
+          onChange={handleChange}
         />
         <button disabled={processing || disabled || succeeded} id='submit'>
           <span id='button-text'>
-            {processing ? <div className='spinner' id='spinner'></div> : 'Pay'}
+            {processing ? (
+              <div className='spinner' id='spinner'></div>
+            ) : (
+              'Pay now'
+            )}
           </span>
         </button>
-        {/* show any error that happened while processing the payment */}
+        {/* Show any error that happens when processing the payment */}
         {error && (
           <div className='card-error' role='alert'>
             {error}
           </div>
         )}
-        {/* show success massage upon completion */}
-        <p className={succeeded ? 'result-massage' : 'result-message hidden'}>
-          Payment succeeded, see the result in your{` `}
-          <a href='https://dashboard.stripe.com/test/payments'>
-            Stripe Dashboard.
-          </a>
-          {` `}Refresh the page to pay again
+        {/* Show a success message upon completion */}
+        <p className={succeeded ? 'result-message' : 'result-message hidden'}>
+          Payment succeeded, see the result in your
+          <a href={`https://dashboard.stripe.com/test/payments`}>
+            {' '}
+            Stripe dashboard.
+          </a>{' '}
+          Refresh the page to pay again.
         </p>
       </form>
     </div>
@@ -121,6 +160,7 @@ const Wrapper = styled.section`
     border-radius: 7px;
     padding: 40px;
   }
+
   input {
     border-radius: 6px;
     margin-bottom: 6px;
@@ -132,18 +172,22 @@ const Wrapper = styled.section`
     background: white;
     box-sizing: border-box;
   }
+
   .result-message {
     line-height: 22px;
     font-size: 16px;
   }
+
   .result-message a {
     color: rgb(89, 111, 214);
     font-weight: 600;
     text-decoration: none;
   }
+
   .hidden {
     display: none;
   }
+
   #card-error {
     color: rgb(105, 115, 134);
     font-size: 16px;
@@ -151,6 +195,7 @@ const Wrapper = styled.section`
     margin-top: 12px;
     text-align: center;
   }
+
   #card-element {
     border-radius: 4px 4px 0 0;
     padding: 12px;
@@ -160,15 +205,19 @@ const Wrapper = styled.section`
     background: white;
     box-sizing: border-box;
   }
+
   #payment-request-button {
     margin-bottom: 32px;
   }
-  /* Buttons and links */
   button {
+    /* background-color: blue;
+    width: 100%;
+    height: 44px;
+    border-radius: 4px; */
     background: #5469d4;
     font-family: Arial, sans-serif;
     color: #ffffff;
-    border-radius: 0 0 4px 4px;
+    border-radius: 4px;
     border: 0;
     padding: 12px 16px;
     font-size: 16px;
@@ -178,20 +227,29 @@ const Wrapper = styled.section`
     transition: all 0.2s ease;
     box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
     width: 100%;
+
+    span {
+      color: white;
+      font-size: 16px;
+    }
   }
+
   button:hover {
     filter: contrast(115%);
   }
+
   button:disabled {
     opacity: 0.5;
     cursor: default;
   }
+
   /* spinner/processing state, errors */
   .spinner,
   .spinner:before,
   .spinner:after {
     border-radius: 50%;
   }
+
   .spinner {
     color: #ffffff;
     font-size: 22px;
@@ -205,15 +263,17 @@ const Wrapper = styled.section`
     -ms-transform: translateZ(0);
     transform: translateZ(0);
   }
+
   .spinner:before,
   .spinner:after {
     position: absolute;
     content: '';
   }
+
   .spinner:before {
     width: 10.4px;
     height: 20.4px;
-    background: #5469d4;
+    background: undefined;
     border-radius: 20.4px 0 0 20.4px;
     top: -0.2px;
     left: -0.2px;
@@ -222,10 +282,11 @@ const Wrapper = styled.section`
     -webkit-animation: loading 2s infinite ease 1.5s;
     animation: loading 2s infinite ease 1.5s;
   }
+
   .spinner:after {
     width: 10.4px;
     height: 10.2px;
-    background: #5469d4;
+    background: undefined;
     border-radius: 0 10.2px 10.2px 0;
     top: -0.1px;
     left: 10.2px;
@@ -234,6 +295,7 @@ const Wrapper = styled.section`
     -webkit-animation: loading 2s infinite ease;
     animation: loading 2s infinite ease;
   }
+
   @keyframes loading {
     0% {
       -webkit-transform: rotate(0deg);
@@ -244,6 +306,7 @@ const Wrapper = styled.section`
       transform: rotate(360deg);
     }
   }
+
   @media only screen and (max-width: 600px) {
     form {
       width: 80vw;

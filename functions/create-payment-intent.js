@@ -1,29 +1,34 @@
-const express = require('express')
-const app = express()
-// This is your test secret API key.
-const stripe = require('stripe')(
-  'sk_test_51MfJ0BSJYE23cJsyDkLfL52n5agJpnxPsV0mDjiyOfUolxawktQikyicaiEGUBSjW33IpuYFLT0a8T4oCjfIQdT300OxHpRBFM'
-)
+//domain/.netlify/functions/create-payment-intent
 
-app.use(express.static('public'))
-app.use(express.json())
+require('dotenv').config()
 
-const calculateOrderAmount = (shipping_fee, total_amount) => {
-  return shipping_fee + total_amount
+const stripe = require('stripe')(process.env.REACT_APP_STRIPE_PRIVATE_ID)
+
+exports.handler = async function (event, context) {
+  if (event.body) {
+    const { cart, shipping_fee, total_amount } = JSON.parse(event.body)
+
+    const calculateOrderAmount = () => {
+      return shipping_fee + total_amount
+    }
+    try {
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: calculateOrderAmount(),
+        currency: 'usd',
+      })
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ clientSecret: paymentIntent.client_secret }),
+      }
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ msg: error.message }),
+      }
+    }
+  }
+  return {
+    statusCode: 200,
+    body: 'create payment intent',
+  }
 }
-
-app.post('/functions/create-payment-intent', async (req, res) => {
-  console.log(req)
-  const { cart, shipping_fee, total_amount } = req.body
-  // Create a PaymentIntent with the order amount and currency
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(shipping_fee + total_amount),
-    currency: 'usd',
-  })
-
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-  })
-})
-
-app.listen(4242, () => console.log('Node server listening on port 4242!'))
