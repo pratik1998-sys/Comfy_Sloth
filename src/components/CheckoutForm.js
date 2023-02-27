@@ -125,6 +125,8 @@ const CheckoutForm = () => {
   )
 }
 
+const promise = loadStripe(process.env.REACT_APP_STRIPE_PRIVATE_ID)
+
 const StripeCheckout = () => {
   return (
     <Wrapper>
