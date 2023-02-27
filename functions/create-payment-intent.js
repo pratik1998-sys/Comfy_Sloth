@@ -12,7 +12,7 @@ const calculateOrderAmount = (shipping_fee, total_amount) => {
   return shipping_fee + total_amount
 }
 
-app.post('/.netlify/functions/create-payment-intent', async (req, res) => {
+app.post('/functions/create-payment-intent', async (req, res) => {
   console.log(req)
   const { cart, shipping_fee, total_amount } = req.body
   // Create a PaymentIntent with the order amount and currency
