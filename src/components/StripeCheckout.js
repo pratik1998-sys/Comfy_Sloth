@@ -11,14 +11,14 @@ import axios from 'axios'
 import { useCartContext } from '../context/cart_context'
 import { useUserContext } from '../context/user_context'
 import { formatPrice } from '../utils/helpers'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const promise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_ID)
 
 const CheckoutForm = () => {
   const { cart, total_amount, shipping_fee, clearCart } = useCartContext()
   const { myUser } = useUserContext()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   //stripe stuff
   const stripe = useStripe()
@@ -53,7 +53,6 @@ const CheckoutForm = () => {
         '/.netlify/functions/create-payment-intent',
         JSON.stringify({ cart, shipping_fee, total_amount })
       )
-      console.log(data.clientSecret)
       setClientSecret(data.clientSecret)
     } catch (error) {
       console.log(error.response)
@@ -81,6 +80,9 @@ const CheckoutForm = () => {
       setError(null)
       setProcessing(false)
       setSucceeded(true)
+      setTimeout(() => {
+        navigate('/')
+      }, 1000)
     }
   }
   const handleChange = async (event) => {
